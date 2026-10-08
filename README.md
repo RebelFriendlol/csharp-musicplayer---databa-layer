@@ -1,25 +1,48 @@
-# sqlwpf - Database Layer / Warstwa Bazy Danych
+# sqlwpf — Data Persistence Layer (SQL & WPF)
+
+[![.NET](https://img.shields.io/badge/.NET-Framework%20%2F%20Core-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![Database](https://img.shields.io/badge/Database-Relational%20SQL-CC292B?logo=microsoftsqlserver&logoColor=white)](#database-schema)
+[![Architecture](https://img.shields.io/badge/Architecture-Data%20Access%20Layer%20(DAL)-orange)](#system-architecture)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+The Data Persistence and Access Layer (DAL) for the C# music player ecosystem. Provides relational database storage, CRUD operations, entity mapping, and state persistence for audio tracks, playlists, and user profiles.
 
 ---
 
-## 🇵🇱 Wersja Polska
-
-### O projekcie
-Projekt uniwersytecki realizujący warstwę trwałego przechowywania danych (Persistence Layer) dla aplikacji okienkowej przy użyciu języka SQL oraz technologii WPF/.NET. Odpowiada za zapisywanie utworów, profili użytkowników i konfiguracji playlist w relacyjnej bazie danych.
-
-###  Jak ten projekt łączy się z pozostałymi?
-Ten projekt to **Pamięć (Warstwa Danych)** całego systemu odtwarzacza:
-* Zapewnia, że utwory zarządzane przez silnik **`csharp-musicplayer`** nie znikają po wyłączeniu programu.
-* Pozwala interfejsowi **`CSHARPGUI / AlbertoPlayer`** wczytywać zapisane wcześniej ulubione playlisty użytkownika bezpośrednio z bazy danych SQL.
+## 🌐 Language / Język
+- [🇬🇧 English](#-english-version)
+- [🇵🇱 Polski](#-wersja-polska)
 
 ---
 
 ## 🇬🇧 English Version
 
 ### About the Project
-A university project implementing the data persistence layer for a desktop application using SQL and WPF/.NET. It focuses on storing tracks, user profiles, and playlist configurations within a relational database.
+Developed as part of a university software engineering curriculum, `sqlwpf` implements the **Data Persistence Layer (DAL)** for a desktop audio player suite. Built using **C#**, **.NET**, and relational **SQL**, the module isolates database access, query execution, and relational schema management from the application's graphical UI and domain business rules.
 
-###  How this project connects to the others?
-This project acts as the **Memory (Data Layer)** of the entire music player architecture:
-* It ensures that tracks managed by the **`csharp-musicplayer`** engine are persistent and not lost when the application closes.
-* It allows the **`CSHARPGUI / AlbertoPlayer`** interface to populate and load previously saved user playlists directly from the SQL database tables.
+### System Architecture
+This library serves as the persistent data backbone across the application tiers:
+
+```text
+       ┌────────────────────────────────────────────────────────┐
+       │   Presentation Layer: CSHARPGUI / AlbertoPlayer (WPF)  │
+       └───────────────────────────┬────────────────────────────┘
+                                   │ Requests saved user state
+                                   ▼
+       ┌────────────────────────────────────────────────────────┐
+       │     Domain / Business Logic: csharp-musicplayer        │
+       └───────────────────────────┬────────────────────────────┘
+                                   │ Dispatches CRUD / Mapping
+                                   ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                        sqlwpf (This Project)                           │
+│     • Data Access Objects (DAO) & Repository Pattern                   │
+│     • Relational Tables: Tracks, Playlists, User Profiles              │
+│     • SQL Connection Pooling, Transactions & Query Execution           │
+└──────────────────────────────────┬─────────────────────────────────────┘
+                                   │ Reads / Writes
+                                   ▼
+                       ┌──────────────────────┐
+                       │ Relational Database  │
+                       │ (SQL Server / SQLite)│
+                       └──────────────────────┘
